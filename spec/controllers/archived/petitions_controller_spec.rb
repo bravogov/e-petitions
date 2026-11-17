@@ -13,6 +13,18 @@ RSpec.describe Archived::PetitionsController, type: :controller do
         expect(assigns(:parliament)).to be_nil
         expect(assigns(:petitions)).to be_empty
       end
+
+      it "returns an empty native JSON index" do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:petitions)).to be_empty
+      end
+
+      it "returns a native CSV index with no archived records" do
+        get :index, format: :csv
+        expect(response).to have_http_status(:ok)
+        expect(response.headers['Content-Disposition']).to include('filtered-archived-petitions.csv')
+      end
     end
 
     context "when no state param is provided" do

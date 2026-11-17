@@ -19,6 +19,27 @@ RSpec.describe 'United Hampshire Parliament identity' do
     end
   end
 
+  it 'does not retain UK institutional names in the public masthead or notification layouts' do
+    %w[
+      application/_header.html.erb
+      layouts/editor.html.erb
+      layouts/default_mail.html.erb
+      layouts/default_mail.text.erb
+    ].each do |file|
+      text = views.join(file).read
+      expect(text).not_to include('UK Parliament')
+      expect(text).not_to include('UK Government')
+    end
+  end
+
+  it 'sets the native page titles and social site identity to United Hampshire' do
+    %w[metadata.en-GB.yml page_titles.en-GB.yml].each do |file|
+      text = Rails.root.join('config', 'locales', file).read
+      expect(text).to include('United Hampshire Parliament and Government')
+      expect(text).not_to include('Petitions - UK Government and Parliament')
+    end
+  end
+
   it 'returns visitors to the independent United Hampshire Parliament website' do
     template = views.join('application/_header.html.erb').read
     expect(template).to include('https://parliament.uhrblx.com/')

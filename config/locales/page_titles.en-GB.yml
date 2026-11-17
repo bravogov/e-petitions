@@ -1,6 +1,6 @@
 en-GB:
   page_titles:
-    default: "Petitions - UK Government and Parliament"
+    default: "Petitions - United Hampshire Parliament and Government"
     archived_petitions:
       index: "View archived petitions - Petitions"
       show: "%{petition} - Petitions"
@@ -34,5 +34,5 @@ en-GB:
       signed: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
     pages:
-      index: "Petitions - UK Government and Parliament"
+      index: "Petitions - United Hampshire Parliament and Government"
       show: "%{title}"
