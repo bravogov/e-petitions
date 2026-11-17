@@ -454,6 +454,23 @@ class Site < ActiveRecord::Base
     end
   end
 
+  # Safe first-install defaults. Neither the Parliament service nor a newly
+  # provisioned database may start accepting petitions or signatures merely
+  # because a House-authorised feature setting has not yet been recorded.
+  # Explicit true and false values set through the native administration
+  # screens retain their normal meaning.
+  class << self
+    def disable_petition_creation?
+      value = instance.disable_petition_creation
+      value.nil? ? true : value
+    end
+
+    def disable_collecting_signatures?
+      value = instance.disable_collecting_signatures
+      value.nil? ? true : value
+    end
+  end
+
   store_accessor :feature_flags, :semantic_searching
   store_accessor :feature_flags, :semantic_search_threshold
   store_accessor :feature_flags, :home_page_message

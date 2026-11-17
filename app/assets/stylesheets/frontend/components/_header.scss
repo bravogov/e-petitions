@@ -68,7 +68,11 @@ body {
       @include responsive-padding(5, bottom);
 
       .banner-logo {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: spacing(3);
+        min-height: 44px;
+        font-weight: 700;
 
         &:hover:not(:focus) {
           box-shadow: inset 0px -1px 0 0 $inverse-link-hover-colour;
@@ -78,11 +82,24 @@ body {
           box-shadow: inset 0px -1px 0 0 $inverse-link-active-colour;
         }
 
-        svg {
+        img {
+          display: block;
           width: 151px;
+          height: auto;
+          object-fit: contain;
 
           @include media-query($from: tablet) {
             width: 214px;
+          }
+        }
+
+        .banner-service-name {
+          font-size: 1.25rem;
+          line-height: 1.2;
+          white-space: nowrap;
+
+          @include media-query($from: tablet) {
+            font-size: 1.5rem;
           }
         }
       }

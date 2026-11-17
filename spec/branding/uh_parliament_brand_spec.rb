@@ -40,6 +40,36 @@ RSpec.describe 'United Hampshire Parliament identity' do
     end
   end
 
+  it 'serves original PC-approved icon assets to public and moderation users' do
+    {
+      'favicon.ico' => '4164ad861c980afdbcdde5695359fb3ab36fbfa4b29bf7f40aa53da7f32d2f67',
+      'favicon-admin.ico' => '4164ad861c980afdbcdde5695359fb3ab36fbfa4b29bf7f40aa53da7f32d2f67',
+      'apple-touch-icon.png' => '5707bb43de15c791446853370bf415aa66d4a7e4881070e0a386ec1bab317a9c',
+      'uh-parliament-brand/uh-parliament-icon.png' => '5707bb43de15c791446853370bf415aa66d4a7e4881070e0a386ec1bab317a9c'
+    }.each do |file, digest|
+      expect(Digest::SHA256.file(Rails.root.join('public', file)).hexdigest).to eq(digest)
+    end
+  end
+
+  it 'removes the original UK crown and portcullis graphic from native public and editorial banners' do
+    %w[application/_header.html.erb layouts/editor.html.erb].each do |file|
+      template = views.join(file).read
+      banner = template.match(/<a href="\/" class="banner-logo"[^>]*>(.*?)<\/a>/m)
+      expect(banner).not_to be_nil
+      expect(banner[1]).to include('src="/uh-parliament-brand/uh-parliament-logo.png"')
+      expect(banner[1]).to include('>Petitions</span>')
+      expect(banner[1]).not_to include('<svg')
+    end
+  end
+
+  it 'uses only the controlled ICO favicon in the native site layouts' do
+    %w[application/_os.html.erb layouts/editor.html.erb].each do |file|
+      template = views.join(file).read
+      expect(template).to include('href="/favicon.ico"')
+      expect(template).not_to include('href="/favicon.svg"')
+    end
+  end
+
   it 'returns visitors to the independent United Hampshire Parliament website' do
     template = views.join('application/_header.html.erb').read
     expect(template).to include('https://parliament.uhrblx.com/')

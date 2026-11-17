@@ -95,6 +95,34 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe "Parliament service first-install petition safety" do
+    let(:site) { described_class.new }
+
+    before do
+      allow(described_class).to receive(:instance).and_return(site)
+    end
+
+    it "keeps creation and signature collection closed when no explicit decision has been configured" do
+      expect(described_class.disable_petition_creation?).to eq(true)
+      expect(described_class.disable_collecting_signatures?).to eq(true)
+      expect(described_class.signature_collection_disabled?).to eq(true)
+    end
+
+    it "respects explicit native administrator closure settings" do
+      site.disable_petition_creation = true
+      site.disable_collecting_signatures = true
+      expect(described_class.disable_petition_creation?).to eq(true)
+      expect(described_class.disable_collecting_signatures?).to eq(true)
+    end
+
+    it "respects explicit native administrator reopening settings" do
+      site.disable_petition_creation = false
+      site.disable_collecting_signatures = false
+      expect(described_class.disable_petition_creation?).to eq(false)
+      expect(described_class.disable_collecting_signatures?).to eq(false)
+    end
+  end
+
   describe "singleton methods" do
     let(:site) { Site.first_or_create(Site.defaults) }
     let(:now) { Time.current }
