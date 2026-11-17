@@ -63,9 +63,14 @@
     </div>
 
     <div class="grid-column-two-thirds-from-laptop">
-      <h2>
-        Archived petitions submitted during the <%= @parliament.start_year %> to <%= @parliament.end_year %> Parliament
-      </h2>
+      <% if @parliament %>
+        <h2>
+          Archived petitions submitted during the <%= @parliament.start_year %> to <%= @parliament.end_year %> Parliament
+        </h2>
+      <% else %>
+        <h2>No archived petitions yet</h2>
+        <p>There are no previous Parliaments with archived petitions to search.</p>
+      <% end %>
 
       <h3>
         <%= t(@petitions.scope, scope: :"petitions.page_titles") %>

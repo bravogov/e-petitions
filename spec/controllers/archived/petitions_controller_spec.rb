@@ -4,6 +4,17 @@ RSpec.describe Archived::PetitionsController, type: :controller do
   let!(:parliament) { FactoryBot.create(:parliament, :archived) }
 
   describe "GET #index" do
+    context "when no Parliament has been archived" do
+      let!(:parliament) { FactoryBot.create(:parliament) }
+
+      it "shows the native empty archive without a server error" do
+        get :index
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:parliament)).to be_nil
+        expect(assigns(:petitions)).to be_empty
+      end
+    end
+
     context "when no state param is provided" do
       it "is successful" do
         get :index
