@@ -36,7 +36,7 @@
       </p>
 
       <p class="uh-parliament-logo">
-        <%= image_tag("frontend/uh-parliament-logo.png", alt: "United Hampshire Parliament logo") %>
+        <%= image_tag("/uh-parliament-brand/uh-parliament-logo.png", alt: "United Hampshire Parliament logo") %>
       </p>
 
     </div>
@@ -44,5 +44,5 @@
 </footer>
 
 <% content_for :preload do %>
-  <%= preload_link_tag "frontend/uh-parliament-logo.png", nopush: true %>
+  <%= preload_link_tag "/uh-parliament-brand/uh-parliament-logo.png", nopush: true %>
 <% end %>
