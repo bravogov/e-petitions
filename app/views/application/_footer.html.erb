@@ -21,7 +21,7 @@
     <hr>
 
     <p class="copyright">
-      © UK Parliament <%= Time.current.year %>
+      © United Hampshire Parliament <%= Time.current.year %>
     </p>
 
     <div class="meta">
@@ -35,18 +35,14 @@
         <span>except where otherwise stated</span>
       </p>
 
-      <p class="uk-parliament-logo">
-        <%= image_tag("frontend/uk-parliament-logo.svg", alt: "UK Parliament logo") %>
+      <p class="uh-parliament-logo">
+        <%= image_tag("frontend/uh-parliament-logo.png", alt: "United Hampshire Parliament logo") %>
       </p>
 
-      <p class="uk-government-logo">
-        <%= image_tag("frontend/uk-government-logo.svg", alt: "UK Government logo") %>
-      </p>
     </div>
   </div>
 </footer>
 
 <% content_for :preload do %>
-  <%= preload_link_tag "frontend/uk-parliament-logo.svg", nopush: true %>
-  <%= preload_link_tag "frontend/uk-government-logo.svg", nopush: true %>
+  <%= preload_link_tag "frontend/uh-parliament-logo.png", nopush: true %>
 <% end %>

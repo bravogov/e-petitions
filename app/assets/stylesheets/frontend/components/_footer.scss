@@ -85,7 +85,7 @@ body > footer {
       }
     }
 
-    &.uk-parliament-logo,
+    &.uh-parliament-logo,
     &.uk-government-logo {
       margin-top: spacing(5);
 
@@ -109,7 +109,7 @@ body > footer {
       }
     }
 
-    &.uk-parliament-logo {
+    &.uh-parliament-logo {
       @include media-query($from: tablet) {
         margin-left: 0;
         padding-bottom: spacing(2);

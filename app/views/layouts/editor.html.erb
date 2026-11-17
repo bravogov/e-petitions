@@ -2,7 +2,7 @@
 <html lang="en-GB">
   <head>
     <title>
-      Petitions - UK Government and Parliament
+      Petitions - United Hampshire Parliament
     </title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -13,8 +13,7 @@
     <%= preload_link_tag 'copy-petition.js', nopush: true %>
     <%= preload_link_tag 'National-LFS-Book.woff2', nopush: true %>
     <%= preload_link_tag 'National-LFS-Semibold.woff2', nopush: true %>
-    <%= preload_link_tag "frontend/uk-parliament-logo.svg", nopush: true %>
-    <%= preload_link_tag "frontend/uk-government-logo.svg", nopush: true %>
+    <%= preload_link_tag "frontend/uh-parliament-logo.png", nopush: true %>
 
     <%= stylesheet_link_tag 'application' %>
 
@@ -54,7 +53,7 @@
     <footer>
       <div class="container">
         <p class="copyright">
-          © UK Parliament <%= Time.current.year %>
+          © United Hampshire Parliament <%= Time.current.year %>
         </p>
 
         <div class="meta">
@@ -68,13 +67,10 @@
             <span>except where otherwise stated</span>
           </p>
 
-          <p class="uk-parliament-logo">
-            <%= image_tag("frontend/uk-parliament-logo.svg", alt: "UK Parliament logo") %>
+          <p class="uh-parliament-logo">
+            <%= image_tag("frontend/uh-parliament-logo.png", alt: "United Hampshire Parliament logo") %>
           </p>
 
-          <p class="uk-government-logo">
-            <%= image_tag("frontend/uk-government-logo.svg", alt: "UK Government logo") %>
-          </p>
         </div>
       </div>
     </footer>
