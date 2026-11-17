@@ -1,7 +1,8 @@
 # An immutable candidate of the original alphagov/e-petitions application.
 # The verified upstream base image was installed for the live service.
-# Rebuild from this exact base digest, never the mutable release tag.
-FROM uhparliament/e-petitions@sha256:8b46305f42e74bc01ce574e5db987a0609ec862e90d4a96a970670d1c25bdbd7
+# The host must verify the exact installed base image ID and retag that immutable
+# local image as indicated below. A remote private-registry pull is not required.
+FROM uh-local/petitions-upstream:sha-8b46305f42e74bc01ce574e5db987a0609ec862e90d4a96a970670d1c25bdbd7
 ARG SOURCE_REVISION
 ARG UPSTREAM_REVISION=a4912c989279f9ffe39c8f6c51658d29d2b5a9ab
 LABEL org.opencontainers.image.title="United Hampshire Parliament petitions" \
