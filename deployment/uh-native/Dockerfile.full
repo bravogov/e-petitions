@@ -26,11 +26,11 @@ RUN test -n "$SOURCE_REVISION" \
  && echo "ab4fc9c480ce922746db6fe5f5a0d5792d5fdd3228e548ab0ea80c43b7df237b  public/uh-parliament-brand/uh-parliament-logo.png" | sha256sum -c - \
  && bundle install --jobs 2 --retry 1 \
  && npm ci --omit=dev --no-audit --no-fund \
- && STORAGE_ADAPTER=test SECRET_KEY_BASE_DUMMY=1 \
+ && STORAGE_ADAPTER=test SECRET_KEY_BASE_DUMMY=1 SMTP_HOST=mailcatcher.localhost SMTP_PORT=1025 \
     EPETITIONS_HOST=petition.parliament.uhrblx.com \
     MODERATE_HOST=moderate.petition.parliament.uhrblx.com \
     bundle exec rails css:build \
- && STORAGE_ADAPTER=test SECRET_KEY_BASE_DUMMY=1 \
+ && STORAGE_ADAPTER=test SECRET_KEY_BASE_DUMMY=1 SMTP_HOST=mailcatcher.localhost SMTP_PORT=1025 \
     EPETITIONS_HOST=petition.parliament.uhrblx.com \
     MODERATE_HOST=moderate.petition.parliament.uhrblx.com \
     bundle exec rails assets:precompile
