@@ -139,11 +139,11 @@ Rails.application.routes.draw do
   end
 
   direct :parliament do
-    "https://www.parliament.uk/"
+    "https://parliament.uhrblx.com/"
   end
 
   direct :national_archives do
-    "https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm"
+    "https://nationalarchives.gov.uhrblx.com/doc/open-government-licence/version/3/"
   end
 
   constraints Site.constraints_for_moderation do
