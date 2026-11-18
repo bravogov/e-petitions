@@ -1,0 +1,29 @@
+# Limited site-wide correction of original Parliament artwork in the already
+# released archive-fix web image. Do not alter its mailer, staff MFA, database
+# schema, Rails dependencies or existing published Pages.
+FROM uhparliament/e-petitions:archive-fix-20261118-candidate
+ARG REPAIR_REVISION
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+      org.opencontainers.image.revision="${REPAIR_REVISION}" \
+      uh.parliament.release.scope="archive-and-approved-parliament-brand"
+WORKDIR /app
+COPY app/views/application/_header.html.erb /app/app/views/application/_header.html.erb
+COPY app/views/application/_footer.html.erb /app/app/views/application/_footer.html.erb
+COPY app/views/application/_os.html.erb /app/app/views/application/_os.html.erb
+COPY app/views/layouts/application.html.erb /app/app/views/layouts/application.html.erb
+COPY app/views/layouts/admin.html.erb /app/app/views/layouts/admin.html.erb
+COPY app/views/layouts/editor.html.erb /app/app/views/layouts/editor.html.erb
+COPY app/views/admin/shared/_header.html.erb /app/app/views/admin/shared/_header.html.erb
+COPY app/views/admin/admin/index.html.erb /app/app/views/admin/admin/index.html.erb
+COPY public/uh-parliament-brand/uh-parliament-logo.png /app/public/uh-parliament-brand/uh-parliament-logo.png
+COPY public/uh-parliament-brand/uh-parliament-icon.png /app/public/uh-parliament-brand/uh-parliament-icon.png
+COPY public/uh-parliament-brand/identity-v2.css /app/public/uh-parliament-brand/identity-v2.css
+COPY public/apple-touch-icon.png /app/public/apple-touch-icon.png
+COPY public/favicon.ico /app/public/favicon.ico
+COPY public/favicon-admin.ico /app/public/favicon-admin.ico
+RUN rm -f /app/public/favicon.svg \
+ /app/public/uh-parliament-brand/uh-government-coat-of-arms.svg \
+ /app/public/assets/frontend/uk-parliament-logo-*.svg \
+ && echo 'ab4fc9c480ce922746db6fe5f5a0d5792d5fdd3228e548ab0ea80c43b7df237b  public/uh-parliament-brand/uh-parliament-logo.png' | sha256sum -c - \
+ && echo '5707bb43de15c791446853370bf415aa66d4a7e4881070e0a386ec1bab317a9c  public/apple-touch-icon.png' | sha256sum -c - \
+ && echo '4164ad861c980afdbcdde5695359fb3ab36fbfa4b29bf7f40aa53da7f32d2f67  public/favicon.ico' | sha256sum -c -
