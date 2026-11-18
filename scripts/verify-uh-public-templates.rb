@@ -61,6 +61,15 @@ checks = {
   "original Parliament icon binary" => Digest::SHA256.file(File.join(root,"public/uh-parliament-brand/uh-parliament-icon.png")).hexdigest ==
     "5707bb43de15c791446853370bf415aa66d4a7e4881070e0a386ec1bab317a9c"
 }
+routes = File.read(File.join(root, "config", "routes.rb"))
+redirects = File.read(File.join(root, "app", "controllers", "redirects_controller.rb"))
+checks["native Parliament direct route"] = routes.include?('"https://parliament.uhrblx.com/"') &&
+  !routes.include?('"https://www.parliament.uk/"')
+checks["native National Archives direct route"] = routes.include?('"https://nationalarchives.gov.uhrblx.com/doc/open-government-licence/version/3/"') &&
+  !routes.include?("www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm")
+checks["legacy copyright route is not permanently cached"] =
+  redirects.match?(/def national_archives\s+response\.headers\["Cache-Control"\] = "no-store"\s+redirect_to national_archives_url, status: :found/m) &&
+  !redirects.match?(/def national_archives\s+http_cache_forever/m)
 checks.each { |k,pass| failures << "Missing required #{k}" unless pass }
 if failures.any?
   warn failures.join("\n")
