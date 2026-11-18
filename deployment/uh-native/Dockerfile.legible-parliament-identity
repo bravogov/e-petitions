@@ -1,0 +1,11 @@
+# Layout-only correction for approved original UH Parliament image.
+# Base is the live, closed-intake, archive-repaired production image.
+FROM uhparliament/e-petitions:closed-homepage-20261118-candidate
+ARG SOURCE_REVISION
+LABEL org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      uh.parliament.release.scope="legible-original-logo-display-only"
+WORKDIR /app
+COPY app/views/application/_header.html.erb /app/app/views/application/_header.html.erb
+COPY app/views/application/_footer.html.erb /app/app/views/application/_footer.html.erb
+COPY public/uh-parliament-brand/identity-v2.css /app/public/uh-parliament-brand/identity-v2.css
+RUN echo 'ab4fc9c480ce922746db6fe5f5a0d5792d5fdd3228e548ab0ea80c43b7df237b  public/uh-parliament-brand/uh-parliament-logo.png' | sha256sum -c -
