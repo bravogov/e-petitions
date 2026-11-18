@@ -1,0 +1,40 @@
+/* Approved parliamentary visual identity: original PC master PNG and ICO files.
+   Preserve source image colours and opacity; no UK royal or parliamentary marks. */
+.banner .banner-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 54px;
+  text-decoration: none;
+}
+.banner .banner-logo img {
+  display: block;
+  width: 214px;
+  max-width: 56vw;
+  height: auto;
+  object-fit: contain;
+}
+.banner .banner-service-name {
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.uh-parliament-logo img {
+  display: block;
+  width: 214px;
+  max-width: 100%;
+  height: auto;
+}
+.uh-parliament-admin-mark {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+  background: white;
+  padding: 2px;
+  border-radius: 2px;
+}
+@media (max-width: 480px) {
+  .banner .banner-logo img { width: 144px; }
+  .banner .banner-service-name { font-size: 1.15rem; }
+}
