@@ -94,8 +94,22 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
 
-  # The production environment file is used in e2e tests but we don't want to send out emails
-  if ENV["SMTP_HOST"] == "mailcatcher.localhost"
+  # The independent Parliamentary service uses the institution-approved Google
+  # Workspace SMTP relay when explicitly enabled in the production deployment.
+  # Relay access is approved at the server and sender level, not through a
+  # shared SMTP user/password in the application. No default test mailcatcher
+  # may be selected in production while this option is enabled.
+  if ENV["SMTP_GOOGLE_RELAY_ENABLED"] == "true"
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch("SMTP_RELAY_HOST"),
+      port: Integer(ENV.fetch("SMTP_RELAY_PORT")),
+      enable_starttls_auto: true,
+      open_timeout: 8,
+      read_timeout: 8
+    }
+    config.action_mailer.raise_delivery_errors = true
+  # The upstream production environment is also used in isolated e2e tests.
+  elsif ENV["SMTP_HOST"] == "mailcatcher.localhost"
     config.action_mailer.smtp_settings = {
       address: ENV.fetch("SMTP_HOST"),
       port: ENV.fetch("SMTP_PORT")
