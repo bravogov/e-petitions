@@ -4,20 +4,35 @@
 
 <% content_for :hero_banner do %>
   <h1>
-    Find, sign and create petitions
+    <% if Site.disable_petition_creation? && Site.disable_collecting_signatures? %>
+      Find petitions
+    <% elsif Site.disable_petition_creation? %>
+      Find and sign petitions
+    <% elsif Site.disable_collecting_signatures? %>
+      Find and create petitions
+    <% else %>
+      Find, sign and create petitions
+    <% end %>
   </h1>
 
   <%= render "pages/home/search_petitions", search_path: petitions_path %>
 <% end %>
 
-<%= render "pages/home/start_petition" %>
+<% unless Site.disable_petition_creation? %>
+  <%= render "pages/home/start_petition" %>
+<% end %>
 
 <hr>
 
 <% if no_petitions_yet? %>
   <section class="petition-items">
-    <h2>The Petitions service is open</h2>
-    <p>No petitions have been published yet – please check back later</p>
+    <% if Site.disable_petition_creation? && Site.disable_collecting_signatures? %>
+      <h2>Electronic petitions are not currently open</h2>
+      <p>You can read <%= link_to "how petitions work", help_path %> and view the public record. Starting and signing electronic petitions will remain unavailable until the House has authorised the scheme.</p>
+    <% else %>
+      <h2>No petitions have been published yet</h2>
+      <p>Please check back later.</p>
+    <% end %>
   </section>
 <% else %>
   <%= render "pages/home/trending_petitions" %>
