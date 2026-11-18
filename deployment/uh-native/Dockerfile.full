@@ -5,7 +5,7 @@ FROM uh-local/petitions-upstream:sha-8b46305f42e74bc01ce574e5db987a0609ec862e90d
 ARG SOURCE_REVISION
 ARG UPSTREAM_REVISION=9ef746b4197ca608328233d460eee0ac3891f224
 LABEL org.opencontainers.image.title="United Hampshire Parliament petitions — full original Rails source" \
-      org.opencontainers.image.source="https://github.com/uh-parliament/e-petitions" \
+      org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
       org.opencontainers.image.revision="${SOURCE_REVISION}" \
       uh.parliament.upstream.revision="${UPSTREAM_REVISION}" \
       uh.parliament.release.candidate="true"
