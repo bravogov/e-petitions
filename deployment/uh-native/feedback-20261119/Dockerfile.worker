@@ -1,0 +1,11 @@
+FROM uhparliament/e-petitions:uh-source-safety-worker-20261119
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions"   org.opencontainers.image.revision="b9c3c52eed6ec592f4a2d5451db8c0ef70f66ed1"   uh.service="parliament-petitions-feedback-native"
+COPY app/models/feedback.rb /app/app/models/feedback.rb
+COPY app/models/feedback_handling_event.rb /app/app/models/feedback_handling_event.rb
+COPY app/controllers/admin/feedback_controller.rb /app/app/controllers/admin/feedback_controller.rb
+COPY app/views/feedback/new.html.erb /app/app/views/feedback/new.html.erb
+COPY app/views/admin/feedback/ /app/app/views/admin/feedback/
+COPY app/views/admin/shared/_header_user_actions.html.erb /app/app/views/admin/shared/_header_user_actions.html.erb
+COPY config/routes.rb /app/config/routes.rb
+COPY db/migrate/20261119232000_add_petitions_feedback_handling.rb /app/db/migrate/20261119232000_add_petitions_feedback_handling.rb
+RUN ruby -c /app/app/models/feedback.rb  && ruby -c /app/app/models/feedback_handling_event.rb  && ruby -c /app/app/controllers/admin/feedback_controller.rb  && ruby -c /app/config/routes.rb  && ruby -c /app/db/migrate/20261119232000_add_petitions_feedback_handling.rb
