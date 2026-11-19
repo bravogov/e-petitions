@@ -1,0 +1,3 @@
+FROM uhparliament/e-petitions:uh-routing-20261118-ba815625
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" org.opencontainers.image.revision="9b6051614b5730e609617cbb16f5b82fab2d232b"
+COPY config/environments/production.rb /app/config/environments/production.rb
