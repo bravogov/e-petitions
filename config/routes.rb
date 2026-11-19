@@ -153,6 +153,9 @@ Rails.application.routes.draw do
       mount Delayed::Web::Engine, at: '/delayed'
 
       root to: 'admin#index'
+      get '/feedback', to: 'feedback#index', as: :feedback_inbox
+      get '/feedback/:id', to: 'feedback#show', as: :feedback_entry
+      patch '/feedback/:id', to: 'feedback#update', as: :update_feedback_entry
       get '/editor', to: 'editor#show'
 
       resource :parliament, only: %i[show update]

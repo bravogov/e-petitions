@@ -1,0 +1,50 @@
+<p><%= link_to "Back to feedback worklist", admin_feedback_inbox_path %></p>
+<h1>Feedback reference <%= @feedback.id %></h1>
+<dl>
+  <dt>Received</dt>
+  <dd><%= @feedback.created_at&.strftime("%-d %B %Y %H:%M") %></dd>
+  <dt>Petition or page mentioned</dt>
+  <dd><%= @feedback.petition_link_or_title.presence || "Not supplied" %></dd>
+  <dt>Reply email supplied</dt>
+  <dd><%= @feedback.email.presence || "No reply address supplied" %></dd>
+  <dt>Message</dt>
+  <dd><%= simple_format(@feedback.comment) %></dd>
+</dl>
+<h2>Handling record</h2>
+<%= form_with url: admin_update_feedback_entry_path(@feedback), method: :patch, local: true do %>
+  <div class="form-group">
+    <%= label_tag "feedback_handling_status", "Status" %>
+    <%= select_tag "feedback[handling_status]",
+      options_for_select(Feedback::HANDLING_STATUSES.map { |x| [x.humanize, x] },
+        @feedback.handling_status), id: "feedback_handling_status" %>
+  </div>
+  <div class="form-group">
+    <%= label_tag "feedback_handling_note", "Handling note" %>
+    <%= text_area_tag "feedback[handling_note]", @feedback.handling_note,
+      id: "feedback_handling_note", rows: 5 %>
+    <p>A closure requires a reason. Do not record an email reply as sent unless
+      you have separately verified delivery.</p>
+  </div>
+  <% if @feedback.errors.any? %>
+    <p role="alert"><%= @feedback.errors.full_messages.to_sentence %></p>
+  <% end %>
+  <%= submit_tag "Save handling record", class: "button" %>
+<% end %>
+
+<h2>Handling history</h2>
+<% if @events.any? %>
+  <ol>
+    <% @events.each do |event| %>
+      <li>
+        <%= event.created_at&.strftime("%-d %B %Y %H:%M") %>:
+        <%= event.from_status.humanize %> to <%= event.to_status.humanize %>
+        by <%= event.admin_user&.pretty_name %>.
+        <% if event.note.present? %>
+          <p><%= event.note %></p>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+<% else %>
+  <p>No handling action recorded.</p>
+<% end %>
