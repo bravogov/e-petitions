@@ -1,0 +1,8 @@
+FROM uhparliament/e-petitions:uh-staff-role-20261118-aa9ba5da
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+      org.opencontainers.image.revision="148b13c68c37a9da8848d8a9b05640bb67d32635" \
+      uh.service="parliament-petitions-source-safety"
+COPY app/models/site.rb /app/app/models/site.rb
+COPY app/mailers/petition_mailer.rb /app/app/mailers/petition_mailer.rb
+COPY app/jobs/email_privacy_policy_updates_job.rb /app/app/jobs/email_privacy_policy_updates_job.rb
+COPY db/migrate/20261119125500_correct_uh_petitions_site_identity_defaults.rb /app/db/migrate/
