@@ -757,9 +757,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_26_123000) do
   end
 
   create_table "sites", force: :cascade do |t|
-    t.string "title", limit: 50, default: "Petition parliament", null: false
+    t.string "title", limit: 50, default: "Petitions - United Hampshire Parliament", null: false
     t.string "url", limit: 50, default: "https://petition.parliament.uhrblx.com", null: false
-    t.string "email_from", limit: 100, default: "\"Petitions: United Hampshire Government and Parliament\" <no-reply@petition.parliament.uhrblx.com>", null: false
+    t.string "email_from", limit: 100, default: "\"United Hampshire Parliamentary Petitions\" <no-reply@petition.parliament.uhrblx.com>", null: false
     t.string "username", limit: 30
     t.string "password_digest", limit: 60
     t.boolean "enabled", default: true, null: false
@@ -773,7 +773,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_10_26_123000) do
     t.datetime "last_checked_at", precision: nil
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.string "feedback_email", limit: 100, default: "\"Petitions: United Hampshire Government and Parliament\" <petitionscommittee@parliament.uk>", null: false
+    t.string "feedback_email", limit: 100, default: "\"United Hampshire Parliamentary Petitions\" <petitionscommittee@parliament.uhrblx.com>", null: false
     t.string "moderate_url", limit: 50, default: "https://moderate.petition.parliament.uhrblx.com", null: false
     t.datetime "last_petition_created_at", precision: nil
     t.integer "login_timeout", default: 1800, null: false
