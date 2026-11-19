@@ -68,7 +68,9 @@ module Admin::ParliamentLogin
     otp = params.dig(:parliament, :authenticator_code).to_s.strip
     allowed = email.bytesize <= 254 && email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
     user = AdminUser.find_by(email: email) if allowed
-    credential = ParliamentStaffCredential.find_by(admin_user_id: user.id) if user&.is_a_moderator?
+    # MFA is required for every established parliamentary staff role.
+    # Authorisation for casework actions remains with the native AdminUser role.
+    credential = ParliamentStaffCredential.find_by(admin_user_id: user.id) if user && AdminUser::ROLES.include?(user.role)
     authenticated = false
 
     if credential
