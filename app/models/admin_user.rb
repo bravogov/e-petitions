@@ -39,7 +39,7 @@ class AdminUser < ActiveRecord::Base
 
     def find_or_create_from!(provider, auth_data)
       email = auth_data.fetch(:uid).downcase
-      groups = Array.wrap(auth_data.info.fetch(:groups))
+      groups = Array.wrap(auth_data.info[:groups])
       role = if (groups & provider.sysadmin).any?
                SYSADMIN_ROLE
              elsif (groups & provider.moderator).any?
