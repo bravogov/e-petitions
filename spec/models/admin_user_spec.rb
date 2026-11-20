@@ -163,6 +163,74 @@ RSpec.describe AdminUser, type: :model do
         end
       end
 
+      context "when a former staff member no longer belongs to an authorised group" do
+        let!(:user) { FactoryBot.create(:sysadmin_user, email: "former@example.com") }
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: user.email,
+            provider: "example",
+            info: { first_name: user.first_name, last_name: user.last_name, groups: ["unrelated-group"] }
+          )
+        end
+
+        it "rejects sign-in, preserves the audit user, and revokes previous sessions" do
+          previous_token = user.persistence_token
+          expect(AdminUser.find_or_create_from!(provider, auth_data)).to be_nil
+          expect(user.reload.role).to eq("sysadmin")
+          expect(user.persistence_token).not_to eq(previous_token)
+          expect(AdminUser.where(email: user.email).count).to eq(1)
+        end
+      end
+
+      context "when the identity provider omits an existing staff member's group claim" do
+        let!(:user) { FactoryBot.create(:sysadmin_user, email: "missing-group@example.com") }
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: user.email,
+            provider: "example",
+            info: { first_name: user.first_name, last_name: user.last_name }
+          )
+        end
+
+        it "denies sign-in and revokes the previous session token" do
+          previous_token = user.persistence_token
+          expect(AdminUser.find_or_create_from!(provider, auth_data)).to be_nil
+          expect(user.reload.persistence_token).not_to eq(previous_token)
+        end
+      end
+
+      context "when an unknown identity has no authorised parliamentary group" do
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: "unknown@example.com",
+            provider: "example",
+            info: { first_name: "Unknown", last_name: "User", groups: ["unrelated-group"] }
+          )
+        end
+
+        it "does not create a staff account" do
+          expect { expect(AdminUser.find_or_create_from!(provider, auth_data)).to be_nil }
+            .not_to change(AdminUser, :count)
+        end
+      end
+
+      context "when an existing staff member is downgraded" do
+        let!(:user) { FactoryBot.create(:sysadmin_user, email: "downgrade@example.com") }
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: user.email,
+            provider: "example",
+            info: { first_name: user.first_name, last_name: user.last_name, groups: ["reviewers"] }
+          )
+        end
+
+        it "updates the role and revokes earlier privileged sessions" do
+          previous_token = user.persistence_token
+          expect(AdminUser.find_or_create_from!(provider, auth_data)).to have_attributes(role: "reviewer")
+          expect(user.reload.persistence_token).not_to eq(previous_token)
+        end
+      end
+
       %w[sysadmin moderator reviewer].each do |role|
         context "when a #{role} user " do
           (%w[sysadmin moderator reviewer] - [role]).each do |new_role|

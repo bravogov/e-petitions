@@ -39,22 +39,31 @@ class AdminUser < ActiveRecord::Base
 
     def find_or_create_from!(provider, auth_data)
       email = auth_data.fetch(:uid).downcase
-      groups = Array.wrap(auth_data.info.fetch(:groups))
-      retried = false
+      groups = Array.wrap(auth_data.info[:groups])
+      role = if (groups & provider.sysadmin).any?
+               SYSADMIN_ROLE
+             elsif (groups & provider.moderator).any?
+               MODERATOR_ROLE
+             elsif (groups & provider.reviewer).any?
+               REVIEWER_ROLE
+             end
 
+      # Staff authority must come from current signed identity-provider groups,
+      # never from the last role stored by a previous successful sign-in.
+      unless role
+        find_by(email: email)&.reset_persistence_token!
+        return nil
+      end
+
+      retried = false
       begin
         find_or_initialize_by(email: email).tap do |user|
           user.first_name = auth_data.info.fetch(:first_name)
           user.last_name = auth_data.info.fetch(:last_name)
 
-          if (groups & provider.sysadmin).any?
-            user.role = SYSADMIN_ROLE
-          elsif (groups & provider.moderator).any?
-            user.role = MODERATOR_ROLE
-          elsif (groups & provider.reviewer).any?
-            user.role = REVIEWER_ROLE
-          end
-
+          # A downgrade invalidates all earlier sessions at their next request.
+          user.reset_persistence_token if user.persisted? && user.role != role
+          user.role = role
           user.save!
         end
       rescue ActiveRecord::RecordNotUnique => e
