@@ -460,12 +460,24 @@ class Site < ActiveRecord::Base
   # Explicit true and false values set through the native administration
   # screens retain their normal meaning.
   class << self
+    # This deployment control is separate from the editable site settings.
+    # It is not evidence of House approval: release still requires the
+    # competent parliamentary decision and the normal production process.
+    # A missing value must leave production petition intake closed.
+    def petition_scheme_release_permitted?
+      !Rails.env.production? || ENV.fetch("UH_PETITIONS_SCHEME_RELEASED", "false") == "true"
+    end
+
     def disable_petition_creation?
+      return true unless petition_scheme_release_permitted?
+
       value = instance.disable_petition_creation
       value.nil? ? true : value
     end
 
     def disable_collecting_signatures?
+      return true unless petition_scheme_release_permitted?
+
       value = instance.disable_collecting_signatures
       value.nil? ? true : value
     end
