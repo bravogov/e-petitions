@@ -1,0 +1,3 @@
+FROM uhparliament/e-petitions:uh-smtp-web-20261118-9b605161
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" org.opencontainers.image.revision="aa9ba5dac65b9789aa13e93ba893de3c6aa244b8"
+COPY app/controllers/concerns/admin/parliament_login.rb /app/app/controllers/concerns/admin/parliament_login.rb

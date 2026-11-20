@@ -1,0 +1,8 @@
+FROM uhparliament/e-petitions:feedback-audit-web-20261120
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+      org.opencontainers.image.revision="99e535019335484636e47aebfc3ad3417dc9392f" \
+      uh.release.scope="parliament-petitions-saml-role-revalidation"
+COPY app/models/admin_user.rb /app/app/models/admin_user.rb
+COPY app/controllers/admin/omniauth_callbacks_controller.rb /app/app/controllers/admin/omniauth_callbacks_controller.rb
+RUN ruby -c /app/app/models/admin_user.rb && \
+    ruby -c /app/app/controllers/admin/omniauth_callbacks_controller.rb

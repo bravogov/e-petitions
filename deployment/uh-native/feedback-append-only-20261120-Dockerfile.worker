@@ -1,0 +1,7 @@
+FROM uhparliament/e-petitions:feedback-native-worker-20261119
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+ org.opencontainers.image.revision="7f048dd1f7d891f2fb6b7538bff6fb3594da3aaa" \
+ uh.release.scope="feedback-append-only-events"
+COPY app/models/feedback_handling_event.rb /app/app/models/feedback_handling_event.rb
+COPY db/migrate/20261120031000_protect_feedback_handling_event_history.rb /app/db/migrate/
+RUN ruby -c /app/app/models/feedback_handling_event.rb && ruby -c /app/db/migrate/20261120031000_protect_feedback_handling_event_history.rb

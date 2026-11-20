@@ -59,8 +59,10 @@ class Archived::PetitionsController < PublicController
   def fetch_petitions
     if params.key?(:parliament)
       scope = Archived::Petition.visible
-    else
+    elsif @parliament
       scope = @parliament.petitions.visible
+    else
+      scope = Archived::Petition.none
     end
 
     if json_request?

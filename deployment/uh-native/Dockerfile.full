@@ -1,0 +1,36 @@
+# Complete current-source build of the original Parliament-owned Rails e-petitions application.
+# The pinned installed Ruby runtime is a bootstrap only; all application and locked
+# Ruby/Node dependencies are rebuilt from this specific institution-owned commit.
+FROM uh-local/petitions-upstream:sha-8b46305f42e74bc01ce574e5db987a0609ec862e90d4a96a970670d1c25bdbd7
+ARG SOURCE_REVISION
+ARG UPSTREAM_REVISION=9ef746b4197ca608328233d460eee0ac3891f224
+LABEL org.opencontainers.image.title="United Hampshire Parliament petitions — full original Rails source" \
+      org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+      org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      uh.parliament.upstream.revision="${UPSTREAM_REVISION}" \
+      uh.parliament.release.candidate="true"
+WORKDIR /app
+
+# Remove every old application file before installing the owner revision.
+# Retain only the immutable bootstrap Ruby/Node dependency caches, which are
+# reconciled with the current checked-in lockfiles below.
+RUN find /app -mindepth 1 -maxdepth 1 ! -name vendor ! -name node_modules -exec rm -rf {} +
+
+# Rebuild the whole original application from the owner source, not selected
+# patched views laid over a superseded runtime.
+COPY . /app
+
+RUN test -n "$SOURCE_REVISION" \
+ && test ! -e public/favicon.svg \
+ && echo "7843a6af7176895b27d99a29f68be34f868624a0e28db18045170d90c6b616b3  Gemfile.lock" | sha256sum -c - \
+ && echo "ab4fc9c480ce922746db6fe5f5a0d5792d5fdd3228e548ab0ea80c43b7df237b  public/uh-parliament-brand/uh-parliament-logo.png" | sha256sum -c - \
+ && bundle install --jobs 2 --retry 1 \
+ && npm ci --omit=dev --no-audit --no-fund \
+ && STORAGE_ADAPTER=test SECRET_KEY_BASE_DUMMY=1 SMTP_HOST=mailcatcher.localhost SMTP_PORT=1025 \
+    EPETITIONS_HOST=petition.parliament.uhrblx.com \
+    MODERATE_HOST=moderate.petition.parliament.uhrblx.com \
+    bundle exec rails css:build \
+ && STORAGE_ADAPTER=test SECRET_KEY_BASE_DUMMY=1 SMTP_HOST=mailcatcher.localhost SMTP_PORT=1025 \
+    EPETITIONS_HOST=petition.parliament.uhrblx.com \
+    MODERATE_HOST=moderate.petition.parliament.uhrblx.com \
+    bundle exec rails assets:precompile

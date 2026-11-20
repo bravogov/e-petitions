@@ -304,7 +304,7 @@ class Site < ActiveRecord::Base
     private
 
     def default_title
-      ENV.fetch('SITE_TITLE', 'Petition parliament')
+      ENV.fetch('SITE_TITLE', 'Petitions - United Hampshire Parliament')
     end
 
     def default_scheme
@@ -328,7 +328,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_host
-      ENV.fetch('EPETITIONS_HOST', 'petition.parliament.uk')
+      ENV.fetch('EPETITIONS_HOST', 'petition.parliament.uhrblx.com')
     end
 
     def default_domain(tld_length = 1)
@@ -348,7 +348,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_moderate_host
-      ENV.fetch('MODERATE_HOST', 'moderate.petition.parliament.uk')
+      ENV.fetch('MODERATE_HOST', 'moderate.petition.parliament.uhrblx.com')
     end
 
     def default_port
@@ -356,11 +356,11 @@ class Site < ActiveRecord::Base
     end
 
     def default_email_from
-      ENV.fetch('EPETITIONS_FROM', %{"Petitions: UK Government and Parliament" <no-reply@#{default_host}>})
+      ENV.fetch('EPETITIONS_FROM', %{"United Hampshire Parliamentary Petitions" <no-reply@#{default_host}>})
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: UK Government and Parliament" <petitionscommittee@#{default_domain}>})
+      ENV.fetch('EPETITIONS_FEEDBACK', %{"United Hampshire Parliamentary Petitions" <petitionscommittee@#{default_domain}>})
     end
 
     def default_username
@@ -451,6 +451,23 @@ class Site < ActiveRecord::Base
 
     define_method(feature_flag) do
       read_store_attribute(:feature_flags, feature_flag)
+    end
+  end
+
+  # Safe first-install defaults. Neither the Parliament service nor a newly
+  # provisioned database may start accepting petitions or signatures merely
+  # because a House-authorised feature setting has not yet been recorded.
+  # Explicit true and false values set through the native administration
+  # screens retain their normal meaning.
+  class << self
+    def disable_petition_creation?
+      value = instance.disable_petition_creation
+      value.nil? ? true : value
+    end
+
+    def disable_collecting_signatures?
+      value = instance.disable_collecting_signatures
+      value.nil? ? true : value
     end
   end
 

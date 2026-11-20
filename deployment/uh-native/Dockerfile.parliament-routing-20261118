@@ -1,0 +1,6 @@
+FROM uhparliament/e-petitions:legible-identity-20261118-candidate
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+      org.opencontainers.image.revision="ba815625bf0d332a0b99187fe0c750a4c76afcb0" \
+      uk.uh.service="Parliament petitions: legacy routing only"
+COPY config/routes.rb /app/config/routes.rb
+COPY app/controllers/redirects_controller.rb /app/app/controllers/redirects_controller.rb

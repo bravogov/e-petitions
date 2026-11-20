@@ -21,7 +21,7 @@
     <hr>
 
     <p class="copyright">
-      © UK Parliament <%= Time.current.year %>
+      © United Hampshire Parliament <%= Time.current.year %>
     </p>
 
     <div class="meta">
@@ -31,22 +31,18 @@
         </svg>
 
         <span>All content is available under the</span>
-        <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>,
+        <a href="https://nationalarchives.gov.uhrblx.com/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>,
         <span>except where otherwise stated</span>
       </p>
 
-      <p class="uk-parliament-logo">
-        <%= image_tag("frontend/uk-parliament-logo.svg", alt: "UK Parliament logo") %>
+      <p class="uh-parliament-logo">
+        <span class="uh-parliament-brand-crop"><%= image_tag("/uh-parliament-brand/uh-parliament-logo.png", alt: "United Hampshire Parliament logo", width: 1600, height: 400) %></span>
       </p>
 
-      <p class="uk-government-logo">
-        <%= image_tag("frontend/uk-government-logo.svg", alt: "UK Government logo") %>
-      </p>
     </div>
   </div>
 </footer>
 
 <% content_for :preload do %>
-  <%= preload_link_tag "frontend/uk-parliament-logo.svg", nopush: true %>
-  <%= preload_link_tag "frontend/uk-government-logo.svg", nopush: true %>
+  <%= preload_link_tag "/uh-parliament-brand/uh-parliament-logo.png", nopush: true %>
 <% end %>

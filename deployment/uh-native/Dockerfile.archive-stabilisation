@@ -1,0 +1,12 @@
+# Narrow production repair on the original installed, parliamentary MFA-enabled
+# application. Preserve its existing Rails, Ruby gems, mail configuration, asset
+# files, moderation and staff authentication. Only the empty-archive paths change.
+FROM uh-local/petitions-upstream:sha-8b46305f42e74bc01ce574e5db987a0609ec862e90d4a96a970670d1c25bdbd7
+ARG REPAIR_REVISION
+LABEL org.opencontainers.image.source="https://github.com/bravogov/e-petitions" \
+      org.opencontainers.image.revision="${REPAIR_REVISION}" \
+      uh.parliament.release.scope="emergency-empty-archive-only" \
+      uh.parliament.original.production.image="sha256:8b46305f42e74bc01ce574e5db987a0609ec862e90d4a96a970670d1c25bdbd7"
+WORKDIR /app
+COPY app/controllers/archived/petitions_controller.rb /app/app/controllers/archived/petitions_controller.rb
+COPY app/views/archived/petitions/index.html.erb /app/app/views/archived/petitions/index.html.erb

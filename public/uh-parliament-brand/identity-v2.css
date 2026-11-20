@@ -1,0 +1,75 @@
+/* Approved parliamentary visual identity: original PC master PNG and ICO files.
+   Preserve source image colours and opacity; no UK royal or parliamentary marks. */
+.banner .banner-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 54px;
+  text-decoration: none;
+}
+.banner .banner-logo img {
+  display: block;
+  width: 214px;
+  max-width: 56vw;
+  height: auto;
+  object-fit: contain;
+}
+.banner .banner-service-name {
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.uh-parliament-logo img {
+  display: block;
+  width: 214px;
+  max-width: 100%;
+  height: auto;
+}
+.uh-parliament-admin-mark {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+  background: white;
+  padding: 2px;
+  border-radius: 2px;
+}
+@media (max-width: 480px) {
+  .banner .banner-logo img { width: 144px; }
+  .banner .banner-service-name { font-size: 1.15rem; }
+}
+
+
+/* The approved 1600x400 master contains transparent padding:
+   visible alpha bounding box x=322..1278, y=76..324.
+   Crop ONLY the display viewport; the original image bytes are untouched. */
+.banner .banner-logo {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+.banner .uh-parliament-brand-crop,
+.uh-parliament-logo .uh-parliament-brand-crop {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 230px;
+  height: 60px;
+}
+.banner .banner-logo .uh-parliament-brand-crop img,
+.uh-parliament-logo .uh-parliament-brand-crop img {
+  display: block;
+  width: 385px;
+  max-width: none;
+  height: 96.25px;
+  transform: translate(-77.5px, -18.3px);
+  object-fit: fill;
+}
+@media (min-width: 768px) {
+  .banner .uh-parliament-brand-crop { width: 250px; height: 65px; }
+  .banner .banner-logo .uh-parliament-brand-crop img {
+    width: 418.5px;
+    height: 104.625px;
+    transform: translate(-84.2px, -19.9px);
+  }
+}

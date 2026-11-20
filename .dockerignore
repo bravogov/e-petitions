@@ -2,3 +2,16 @@
 /pkg/*
 /tmp/*
 /node_modules/*
+/.git
+/.env
+/.env.*
+/storage
+/vendor
+/coverage
+/spec
+/test
+/.github
+/.bundle
+/.vscode
+/.idea
+/.DS_Store

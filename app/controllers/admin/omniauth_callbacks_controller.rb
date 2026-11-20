@@ -67,7 +67,7 @@ class Admin::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       end
     end
 
-    %w[first_name last_name groups].each do |key|
+    %w[first_name last_name].each do |key|
       unless auth_data.info[key].present?
         raise ActionController::BadRequest, "Missing authentication info: '#{key}'"
       end

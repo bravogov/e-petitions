@@ -1,0 +1,29 @@
+<h1>Petitions service feedback</h1>
+<p>This private worklist contains enquiries submitted through the Parliamentary
+  Petitions service. Do not treat an enquiry as a petition or a House decision.</p>
+<p>
+  <%= link_to "All", admin_feedback_inbox_path %>
+  <% Feedback::HANDLING_STATUSES.each do |state| %>
+    | <%= link_to "#{state.humanize} (#{@counts.fetch(state, 0)})",
+        admin_feedback_inbox_path(state: state) %>
+  <% end %>
+</p>
+<table class="user-list">
+  <thead>
+    <tr><th>Received</th><th>Message</th><th>Status</th><th>Record</th></tr>
+  </thead>
+  <tbody>
+    <% @feedbacks.each do |item| %>
+      <tr>
+        <td><%= item.created_at&.strftime("%-d %B %Y %H:%M") %></td>
+        <td><%= truncate(item.comment, length: 140) %></td>
+        <td><%= item.handling_status.humanize %></td>
+        <td><%= link_to "Review", admin_feedback_entry_path(item) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% if @feedbacks.empty? %>
+  <p>No enquiries in this view.</p>
+<% end %>
+<%= will_paginate @feedbacks %>

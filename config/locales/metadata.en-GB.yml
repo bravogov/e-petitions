@@ -43,14 +43,14 @@ en-GB:
         thank_you: "You need to confirm your email address before we can count your signature for this petition."
 
     open_graph:
-      site_name: "Petitions - UK Parliament and UK Government"
-      default_title: "Petitions - UK Parliament and UK Government"
-      default_description: "Find, sign or create petitions calling for the UK Parliament or UK Government to act"
+      site_name: "Petitions - United Hampshire Parliament and Government"
+      default_title: "Petitions - United Hampshire Parliament and Government"
+      default_description: "Find published petitions and information about the United Hampshire parliamentary petitions service"
       title: "Petition: %{petition}"
       archived_title: "Archived Petition: %{petition}"
 
     x:
-      default_title: "Petitions - UK Parliament and UK Government"
-      default_description: "Find, sign or create petitions calling for the UK Parliament or UK Government to act"
+      default_title: "Petitions - United Hampshire Parliament and Government"
+      default_description: "Find published petitions and information about the United Hampshire parliamentary petitions service"
       title: "Petition: %{petition}"
       archived_title: "Archived Petition: %{petition}"

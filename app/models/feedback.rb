@@ -1,6 +1,15 @@
 require 'mail'
 
 class Feedback < ActiveRecord::Base
+  HANDLING_STATUSES = %w[new reviewing closed].freeze
+
+  belongs_to :handled_by, class_name: "AdminUser", optional: true
+  has_many :handling_events, class_name: "FeedbackHandlingEvent",
+    dependent: :restrict_with_exception
+
+  validates :handling_status, inclusion: { in: HANDLING_STATUSES }
+  validates :handling_note, length: { maximum: 4000 }, allow_blank: true
+  validates :handling_note, presence: true, if: -> { handling_status == "closed" }
   class RateLimitExceededError < RuntimeError; end
 
   validates :comment, presence: true, length: { maximum: 32768 }

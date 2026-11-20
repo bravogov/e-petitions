@@ -139,11 +139,11 @@ Rails.application.routes.draw do
   end
 
   direct :parliament do
-    "https://www.parliament.uk/"
+    "https://parliament.uhrblx.com/"
   end
 
   direct :national_archives do
-    "https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm"
+    "https://nationalarchives.gov.uhrblx.com/doc/open-government-licence/version/3/"
   end
 
   constraints Site.constraints_for_moderation do
@@ -153,6 +153,9 @@ Rails.application.routes.draw do
       mount Delayed::Web::Engine, at: '/delayed'
 
       root to: 'admin#index'
+      get '/feedback', to: 'feedback#index', as: :feedback_inbox
+      get '/feedback/:id', to: 'feedback#show', as: :feedback_entry
+      patch '/feedback/:id', to: 'feedback#update', as: :update_feedback_entry
       get '/editor', to: 'editor#show'
 
       resource :parliament, only: %i[show update]
@@ -300,6 +303,9 @@ Rails.application.routes.draw do
     as :user do
       controller 'admin/sessions' do
         get  '/admin/login',    action: 'new'
+        get  '/admin/parliament/setup', action: 'parliament_setup'
+        post '/admin/parliament/setup', action: 'parliament_activate'
+        post '/admin/parliament/login', action: 'parliament_session'
         post '/admin/login',    action: 'create', as: nil
         get  '/admin/logout',   action: 'destroy'
         get  '/admin/continue', action: 'continue'

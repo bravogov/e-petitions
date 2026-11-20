@@ -18,9 +18,8 @@ class RedirectsController < ApplicationController
   end
 
   def national_archives
-    http_cache_forever(public: true) do
-      redirect_to national_archives_url, status: :moved_permanently, allow_other_host: true
-    end
+    response.headers["Cache-Control"] = "no-store"
+    redirect_to national_archives_url, status: :found, allow_other_host: true
   end
 
   def standards

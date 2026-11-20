@@ -1,0 +1,9 @@
+# Correct the authorised closed-service public state without replacing the
+# already released archival and approved-identity web image.
+FROM uhparliament/e-petitions:archive-identity-20261118-candidate
+ARG SOURCE_REVISION
+LABEL org.opencontainers.image.revision="${SOURCE_REVISION}" \
+      uh.parliament.release.scope="closed-petitions-homepage-and-eligibility"
+WORKDIR /app
+COPY app/views/pages/home/_opened.html.erb /app/app/views/pages/home/_opened.html.erb
+COPY app/views/pages/home/_start_petition.html.erb /app/app/views/pages/home/_start_petition.html.erb

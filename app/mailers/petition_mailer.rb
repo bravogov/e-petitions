@@ -274,7 +274,11 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe_post: one_click_unsubscribe
   end
 
+  # Retain the historic 2022 source, but never issue an unapproved notice.
   def privacy_policy_update_email(privacy_notification)
+    if Rails.env.production?
+      raise "The inherited 2022 privacy notice is not authorised for United Hampshire production delivery"
+    end
     @name = privacy_notification.name
     @petitions = privacy_notification.petitions.sample
     @remaining_petition_count = privacy_notification.petitions.remaining_count

@@ -4,6 +4,29 @@ RSpec.describe Archived::PetitionsController, type: :controller do
   let!(:parliament) { FactoryBot.create(:parliament, :archived) }
 
   describe "GET #index" do
+    context "when no Parliament has been archived" do
+      let!(:parliament) { FactoryBot.create(:parliament) }
+
+      it "shows the native empty archive without a server error" do
+        get :index
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:parliament)).to be_nil
+        expect(assigns(:petitions)).to be_empty
+      end
+
+      it "returns an empty native JSON index" do
+        get :index, format: :json
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:petitions)).to be_empty
+      end
+
+      it "returns a native CSV index with no archived records" do
+        get :index, format: :csv
+        expect(response).to have_http_status(:ok)
+        expect(response.headers['Content-Disposition']).to include('filtered-archived-petitions.csv')
+      end
+    end
+
     context "when no state param is provided" do
       it "is successful" do
         get :index

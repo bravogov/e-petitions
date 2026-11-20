@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_19_232000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "pg_catalog.plpgsql"
@@ -381,7 +381,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
     t.string "user_agent"
     t.string "ip_address", limit: 20
     t.datetime "created_at", precision: nil
+    t.string "handling_status", limit: 20, default: "new", null: false
+    t.bigint "handled_by_id"
+    t.datetime "handled_at"
+    t.text "handling_note"
+    t.datetime "updated_at"
+    t.index ["handling_status"], name: "index_feedback_on_handling_status"
     t.index ["ip_address"], name: "index_feedback_on_ip_address"
+  end
+
+  create_table "feedback_handling_events", force: :cascade do |t|
+    t.bigint "feedback_id", null: false
+    t.bigint "admin_user_id", null: false
+    t.string "from_status", limit: 20, null: false
+    t.string "to_status", limit: 20, null: false
+    t.text "note"
+    t.datetime "created_at", null: false
+    t.index ["feedback_id", "created_at"], name: "index_feedback_handling_events_by_feedback_and_date"
   end
 
   create_table "government_responses", force: :cascade do |t|
@@ -476,6 +492,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
     t.datetime "updated_at", null: false
     t.index ["constituency_id"], name: "index_parliament_constituencies_on_constituency_id"
     t.index ["parliament_id", "constituency_id"], name: "idx_on_parliament_id_constituency_id_ced79e105b", unique: true
+  end
+
+  create_table "parliament_staff_credentials", force: :cascade do |t|
+    t.bigint "admin_user_id", null: false
+    t.string "password_digest"
+    t.text "totp_ciphertext"
+    t.string "enrolment_digest"
+    t.datetime "enrolment_expires_at"
+    t.integer "failed_attempts", default: 0, null: false
+    t.datetime "locked_until"
+    t.bigint "last_totp_step"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["admin_user_id"], name: "index_parliament_staff_credentials_on_admin_user_id", unique: true
+    t.index ["enrolment_digest"], name: "index_parliament_staff_credentials_on_enrolment_digest", unique: true
   end
 
   create_table "parliaments", force: :cascade do |t|
@@ -742,9 +773,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
   end
 
   create_table "sites", force: :cascade do |t|
-    t.string "title", limit: 50, default: "Petition parliament", null: false
-    t.string "url", limit: 50, default: "https://petition.parliament.uk", null: false
-    t.string "email_from", limit: 100, default: "\"Petitions: UK Government and Parliament\" <no-reply@petition.parliament.uk>", null: false
+    t.string "title", limit: 50, default: "Petitions - United Hampshire Parliament", null: false
+    t.string "url", limit: 50, default: "https://petition.parliament.uhrblx.com", null: false
+    t.string "email_from", limit: 100, default: "\"United Hampshire Parliamentary Petitions\" <no-reply@petition.parliament.uhrblx.com>", null: false
     t.string "username", limit: 30
     t.string "password_digest", limit: 60
     t.boolean "enabled", default: true, null: false
@@ -758,8 +789,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
     t.datetime "last_checked_at", precision: nil
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.string "feedback_email", limit: 100, default: "\"Petitions: UK Government and Parliament\" <petitionscommittee@parliament.uk>", null: false
-    t.string "moderate_url", limit: 50, default: "https://moderate.petition.parliament.uk", null: false
+    t.string "feedback_email", limit: 100, default: "\"United Hampshire Parliamentary Petitions\" <petitionscommittee@parliament.uhrblx.com>", null: false
+    t.string "moderate_url", limit: 50, default: "https://moderate.petition.parliament.uhrblx.com", null: false
     t.datetime "last_petition_created_at", precision: nil
     t.integer "login_timeout", default: 1800, null: false
     t.jsonb "feature_flags", default: {}, null: false
@@ -848,10 +879,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
   add_foreign_key "debate_outcomes", "petitions", on_delete: :cascade
   add_foreign_key "domains", "domains", column: "canonical_domain_id"
   add_foreign_key "email_requested_receipts", "petitions"
+  add_foreign_key "feedback", "admin_users", column: "handled_by_id"
+  add_foreign_key "feedback_handling_events", "admin_users"
+  add_foreign_key "feedback_handling_events", "feedback"
   add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
   add_foreign_key "parliament_constituencies", "constituencies", primary_key: "external_id"
   add_foreign_key "parliament_constituencies", "parliaments"
+  add_foreign_key "parliament_staff_credentials", "admin_users"
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_mailshots", "petitions"
   add_foreign_key "petition_statistics", "petitions"
