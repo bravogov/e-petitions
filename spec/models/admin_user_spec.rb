@@ -182,6 +182,23 @@ RSpec.describe AdminUser, type: :model do
         end
       end
 
+      context "when the identity provider omits an existing staff member's group claim" do
+        let!(:user) { FactoryBot.create(:sysadmin_user, email: "missing-group@example.com") }
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: user.email,
+            provider: "example",
+            info: { first_name: user.first_name, last_name: user.last_name }
+          )
+        end
+
+        it "denies sign-in and revokes the previous session token" do
+          previous_token = user.persistence_token
+          expect(AdminUser.find_or_create_from!(provider, auth_data)).to be_nil
+          expect(user.reload.persistence_token).not_to eq(previous_token)
+        end
+      end
+
       context "when an unknown identity has no authorised parliamentary group" do
         let(:auth_data) do
           OmniAuth::AuthHash.new(
