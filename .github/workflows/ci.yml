@@ -2,9 +2,14 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - fix/uh-parliament-petitions-native-20261117
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - fix/uh-parliament-petitions-native-20261117
+  workflow_dispatch:
 
 jobs:
   bundle-audit:
