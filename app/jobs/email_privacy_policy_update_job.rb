@@ -32,7 +32,8 @@ class EmailPrivacyPolicyUpdateJob < ApplicationJob
       end
     end
   ensure
-    trap("TERM", worker)
+    # No signal handler is installed when production blocks this job.
+    trap("TERM", worker) if worker
   end
 
   private
