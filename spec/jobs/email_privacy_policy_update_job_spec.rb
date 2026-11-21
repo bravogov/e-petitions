@@ -1,6 +1,17 @@
 require "rails_helper"
 
 RSpec.describe EmailPrivacyPolicyUpdateJob, type: :job do
+  describe "United Hampshire production safeguard" do
+    it "does not generate privacy notification records or enqueue outgoing mail" do
+      allow(Rails.env).to receive(:production?).and_return(true)
+      expect(PrivacyNotification).not_to receive(:create!)
+      expect(DeliverPrivacyPolicyUpdateJob).not_to receive(:perform_later)
+      expect {
+        described_class.perform_now(petition: nil, time: Time.current)
+      }.not_to change { PrivacyNotification.count }
+    end
+  end
+
   describe "perform" do
     context "signature validated, without matching privacy_notification" do
       let(:petition) { FactoryBot.create(:petition) }
