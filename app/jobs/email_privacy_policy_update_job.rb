@@ -2,6 +2,11 @@ class EmailPrivacyPolicyUpdateJob < ApplicationJob
   queue_as :low_priority
 
   def perform(petition:, time:)
+    if Rails.env.production?
+      Rails.logger.warn("Legacy privacy notice generation blocked pending parliamentary authorisation")
+      return
+    end
+
     terminating = false
 
     worker = trap("TERM") do
@@ -27,7 +32,8 @@ class EmailPrivacyPolicyUpdateJob < ApplicationJob
       end
     end
   ensure
-    trap("TERM", worker)
+    # No signal handler is installed when production blocks this job.
+    trap("TERM", worker) if worker
   end
 
   private
